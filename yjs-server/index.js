@@ -1,5 +1,6 @@
+//index.js
 const { app } = require('./app'); // ✅ Import the app you defined
-const app = express();
+
 
 const PORT = process.env.PORT || 1234;
 

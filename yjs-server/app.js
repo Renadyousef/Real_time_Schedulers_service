@@ -1,13 +1,37 @@
-const express = require('express');
-const { WebSocketServer } = require('ws');
-const { setupWSConnection } = require('y-websocket/bin/utils.js');
+// app.js
+import express from "express";
+import { WebSocketServer } from "ws";
+import * as YWebSocket from "y-websocket";
+
+import cors from "cors";
+
+// Routes
+import ScheduleRoutes from "./Routes/ScheduleRoutes.js";
+import historyRoutes from "./Routes/HistoryRoutes.js";
 
 const app = express();
 
-// Middleware example (if needed)
+// CORS configuration
+const allowedOrigins = [
+  "https://smart-schedule-phi.vercel.app", // Vercel
+  "http://localhost:3000"                  // local client container
+];
 
+app.use(
+  cors({
+    origin: allowedOrigins,
+    methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization", "X-User-Id", "Cache-Control"],
+    credentials: true,
+  })
+);
+
+// JSON middleware
 app.use(express.json());
 
-//routes
+// Routes
+app.use("/schedule", ScheduleRoutes);
+app.use("/history", historyRoutes);
 
-module.exports = {app};
+// Export the app for ESM
+export { app };
